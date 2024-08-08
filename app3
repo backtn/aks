@@ -88,33 +88,24 @@ spec:
         "kubernetes.io/os": linux
       containers:
       - name: order-service
-        image: ghcr.io/azure-samples/aks-store-demo/order-service:latest
+        image: acraz01mvp1.azurecr.io/aks-store-demo/order-service:latest
         ports:
         - containerPort: 3000
         env:
         - name: ORDER_QUEUE_HOSTNAME
-          value: "rabbitmq"
+          value: "sb-store-demo-330.servicebus.windows.net" # Example: sb-store-demo-123456.servicebus.windows.net
         - name: ORDER_QUEUE_PORT
-          value: "5672"
+          value: "5671"
+        - name: ORDER_QUEUE_TRANSPORT
+          value: "tls"
         - name: ORDER_QUEUE_USERNAME
-          value: "username"
+          value: "sender"
         - name: ORDER_QUEUE_PASSWORD
-          value: "password"
+          value: "11111"
         - name: ORDER_QUEUE_NAME
           value: "orders"
         - name: FASTIFY_ADDRESS
           value: "0.0.0.0"
-        resources:
-          requests:
-            cpu: 1m
-            memory: 50Mi
-          limits:
-            cpu: 75m
-            memory: 128Mi
-      initContainers:
-      - name: wait-for-rabbitmq
-        image: busybox
-        command: ['sh', '-c', 'until nc -zv rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done;']
         resources:
           requests:
             cpu: 1m
